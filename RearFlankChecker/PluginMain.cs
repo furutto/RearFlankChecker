@@ -12,6 +12,7 @@ namespace RearFlankChecker
         public ACTTabControl ACTTabControl { get; private set; }
         public AttackMissView AttackMissView { get; private set; }
         private SoundPlayer soundPlayer;
+        private String actorId;
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
@@ -33,12 +34,14 @@ namespace RearFlankChecker
             
             ActGlobals.oFormActMain.AfterCombatAction += AfterCombatAction;
             ActGlobals.oFormActMain.OnCombatStart += CombatStarted;
+            ActGlobals.oFormActMain.OnLogLineRead += OnLogLineRead;
         }
 
         public void DeInitPlugin()
         {
             ActGlobals.oFormActMain.AfterCombatAction -= AfterCombatAction;
             ActGlobals.oFormActMain.OnCombatStart -= CombatStarted;
+            ActGlobals.oFormActMain.OnLogLineRead -= OnLogLineRead;
 
             if (Settings != null)
                 Settings.Save();
@@ -54,6 +57,7 @@ namespace RearFlankChecker
 
         private void CombatStarted(bool isImport, CombatToggleEventArgs encounterInfo)
         {
+            actorId = null;
             AttackMissView.Reset();
         }
 
@@ -61,6 +65,11 @@ namespace RearFlankChecker
         {
             if (CombatActionChecker.IsMySkill(actionInfo))
             {
+                if (actorId == null)
+                {
+                    actorId = CombatActionChecker.GetActorId(actionInfo);
+                }
+
                 if (!CombatActionChecker.JudgeFlankOrRearSkill(actionInfo))
                 {
                     AttackMissView.CountUp(actionInfo.theAttackType);
@@ -69,6 +78,45 @@ namespace RearFlankChecker
                     {
                         soundPlayer.Play();
                     }
+                }
+            }
+        }
+
+        private void OnLogLineRead(bool isImport, LogLineEventArgs logInfo)
+        {
+            String logLine = logInfo.logLine;
+
+            // "[07:23:04.000] 15:FFFFFF"
+            if (logLine.Length < 18)
+            {
+                return;
+            }
+
+            // 15: から始まるなら 戦闘スキル発動っぽい
+            if (!logLine.Substring(15, 3).Equals("15:"))
+                return;
+
+
+            string[] lineDatas = logLine.Split(':');
+
+
+            if (lineDatas.Length < 16)
+            {
+                return;
+            }
+
+            if (!lineDatas[3].Equals(actorId))
+            {
+                return;
+            }
+
+            if (!CombatActionChecker.JudgeFlankOrRearSkillForLog(lineDatas, actorId))
+            {
+                AttackMissView.CountUp(lineDatas[6]);
+
+                if (soundPlayer != null && ACTTabControl.IsSoundEnable())
+                {
+                    soundPlayer.Play();
                 }
             }
         }

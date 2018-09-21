@@ -8,7 +8,7 @@ namespace RearFlankChecker.Util
 
         public static bool IsMySkill(CombatActionEventArgs actionInfo)
         {
-            // 自分のスキルかどうか（名前のバッティングは？）
+            // 自分のスキルかどうか
             if (!actionInfo.combatAction.Attacker.Equals(ActGlobals.charName))
             {
                 return false;
@@ -61,8 +61,7 @@ namespace RearFlankChecker.Util
                     break;
                 // モンク
                 case 53:  // 連撃
-                    // 連撃ならクリティカルかどうかだけで判定（背面じゃなくても、壱の型でなくてもクリティカルならヒットしてしまう）
-                    isJudge = actionInfo.critical;
+                    // 連撃はlogから判定する
                     break;
                 case 74:  // 双竜脚
                 case 61:  // 双掌打
@@ -77,6 +76,35 @@ namespace RearFlankChecker.Util
             }
 
             return isJudge;
+        }
+
+
+        public static bool JudgeFlankOrRearSkillForLog(String[] logDatas, String actorId)
+        {
+            Boolean isJudge = true;
+
+            switch (logDatas[5].ToUpper())
+            {
+                // 侍
+                case "1D39": // 月光
+                case "1D3A": // 花車 　　成功 A3C 失敗 53C っぽい
+                    isJudge = logDatas[13].Equals("A3C") || logDatas[11].Equals("A3C");
+                    break;
+                // モンク  
+                case "35":  // 連撃
+                    isJudge = logDatas[13].Equals("1C") || logDatas[15].Equals("1C") || logDatas[11].Equals("1C");
+                    break;
+            }
+
+            return isJudge;
+        }
+
+
+        public static String GetActorId(CombatActionEventArgs actionInfo)
+        {
+            Object actorId = null;
+            actionInfo.tags.TryGetValue("ActorID", out actorId);
+            return actorId == null ? "" : actorId.ToString();
         }
     }
 }

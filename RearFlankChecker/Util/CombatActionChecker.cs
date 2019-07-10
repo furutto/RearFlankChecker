@@ -40,10 +40,12 @@ namespace RearFlankChecker.Util
             {
                 // 忍者
                 case 2255:  // 旋風刃
-                    isJudge = sDmgAdjust.Equals("0.7");
+                    // isJudge = sDmgAdjust.Equals("0.7");  // patch 4.5
+                    isJudge = sDmgAdjust.Equals("0.76");    // patch 5.0
                     break;
                 case 3563:  // 強甲破点突
-                    isJudge = sDmgAdjust.Equals("0.66");
+                    // isJudge = sDmgAdjust.Equals("0.66"); // patch 4.5
+                    isJudge = sDmgAdjust.Equals("0.74");    // patch 5.0
                     break;
                 case 2258:  // だまし
                     isJudge = !sDmgAdjust.Equals("");
@@ -52,7 +54,8 @@ namespace RearFlankChecker.Util
                 case 88:  // 桜華
                     //isJudge = sDmgAdjust.Equals("0.64");
                     // コンボ失敗して背面攻撃したら 0.28（コンボ成功時のみ考慮で良いとは思うが一応追加した）
-                    isJudge = sDmgAdjust.Equals("0.64") || sDmgAdjust.Equals("0.28");
+                    // isJudge = sDmgAdjust.Equals("0.64") || sDmgAdjust.Equals("0.28"); // patch 4.5
+                    isJudge = sDmgAdjust.Equals("0.69") || sDmgAdjust.Equals("0.28");    // patch 5.0
                     break;
                 case 79:  // ヘヴィスラスト
                 case 3554:  // 竜牙竜爪（側面）

@@ -6,32 +6,20 @@ namespace RearFlankChecker
 {
     public partial class AttackMissView : Form
     {
-        public AttackMissView()
+        private PluginMain plugin;
+        public AttackMissView(PluginMain _plugin)
         {
             InitializeComponent();
 
-            this.MouseDown += AttackMissView_MouseDown;
-            MyOpacity = 0.8;
+            this.plugin = _plugin;
             MoveByDrag = true;
+
+            this.Move += AttackMissView_Move;
+            this.MouseDown += AttackMissView_MouseDown;
+
             Reset();
         }
 
-        public double MyOpacity
-        {
-            get { return Opacity; }
-            set
-            {
-                Opacity = value;
-                OnOpacityChanged();
-            }
-        }
-
-        public event EventHandler OpacityChanged;
-        public void OnOpacityChanged()
-        {
-            if (OpacityChanged != null)
-                OpacityChanged(this, EventArgs.Empty);
-        }
 
         private bool moveByDrag;
         public bool MoveByDrag
@@ -50,6 +38,11 @@ namespace RearFlankChecker
             {
                 Win32APIUtils.DragMove(Handle);
             }
+        }
+
+        private void AttackMissView_Move(object sender, EventArgs e)
+        {
+            plugin.ACTTabControl.AttackMissView_Move(sender, e);
         }
 
         public void Reset()

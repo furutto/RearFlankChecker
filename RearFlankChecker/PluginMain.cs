@@ -3,12 +3,13 @@ using System;
 using System.Windows.Forms;
 using RearFlankChecker.Util;
 using System.Media;
+using System.Reflection;
 
 namespace RearFlankChecker
 {
     public class PluginMain : IActPluginV1
     {
-        public PluginSettings Settings { get; private set; }
+        public DataManager Settings { get; private set; }
         public ACTTabControl ACTTabControl { get; private set; }
         public AttackMissView AttackMissView { get; private set; }
         private SoundPlayer soundPlayer;
@@ -16,22 +17,23 @@ namespace RearFlankChecker
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
-            Settings = new PluginSettings(this);
-            Settings.AddIntSetting("OpacityPercentage");
-
-            AttackMissView = new AttackMissView();
-
+            AttackMissView = new AttackMissView(this);
             ACTTabControl = new ACTTabControl(this);
-            pluginScreenSpace.Text = "Rear And Flank Checker";
+            pluginScreenSpace.Text = Assembly.GetExecutingAssembly().GetName().Name;
             pluginScreenSpace.Controls.Add(ACTTabControl);
-            ACTTabControl.Show();
+            ACTTabControl.InitializeSettings();
 
+            Settings = new DataManager(this);
             Settings.Load();
+
+            ACTTabControl.Show();
 
             String path = ResourceLocator.findResourcePath("resources/wav/miss.wav");
             if(path != null)
                 soundPlayer = new SoundPlayer(path);
             
+
+
             ActGlobals.oFormActMain.AfterCombatAction += AfterCombatAction;
             ActGlobals.oFormActMain.OnCombatStart += CombatStarted;
             ActGlobals.oFormActMain.OnLogLineRead += OnLogLineRead;
@@ -121,11 +123,7 @@ namespace RearFlankChecker
             }
         }
 
-        public int OpacityPercentage
-        {
-            get { return (int)(AttackMissView.MyOpacity * 100.0); }
-            set { AttackMissView.MyOpacity = (double)value / 100.0; }
-        }
+
 
     }
 

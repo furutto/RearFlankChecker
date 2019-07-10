@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RearFlankChecker.Util;
+using System;
 using System.Windows.Forms;
 
 namespace RearFlankChecker
@@ -14,46 +15,14 @@ namespace RearFlankChecker
 
             plugin = _plugin;
             updateFromOverlayMove = false;
-
-            var settings = plugin.Settings;
-            settings.AddControlSetting("SoundEnable", checkSoundEnable);
-
-            settings.AddControlSetting("ViewVisible", checkViewVisible);
-            settings.AddControlSetting("ViewMouseEnable", checkViewMouseEnable);
-            settings.AddControlSetting("ViewX", udViewX);
-            settings.AddControlSetting("ViewY", udViewY);
-
-            plugin.AttackMissView.OpacityChanged += AttackMissView_OpacityChanged;
-
-            AttackMissView_OpacityChanged(this, null);
-            plugin.AttackMissView.Move += AttackMissView_Move;
-
-            checkViewVisible_CheckedChanged(this, null);
-            checkViewMouseEnable_CheckedChanged(this, null);
         }
 
-        private void AttackMissView_Move(object sender, EventArgs e)
+        public void AttackMissView_Move(object sender, EventArgs e)
         {
             updateFromOverlayMove = true;
             udViewX.Value = plugin.AttackMissView.Left;
             udViewY.Value = plugin.AttackMissView.Top;
             updateFromOverlayMove = false;
-        }
-
-        private void AttackMissView_OpacityChanged(object sender, EventArgs e)
-        {
-            int percentage = (int)(plugin.AttackMissView.MyOpacity * 100);
-
-            labelCurrOpacity.Text = String.Format("{0}%", percentage);
-
-            percentage = Math.Min(trackBarOpacity.Maximum, percentage);
-            percentage = Math.Max(trackBarOpacity.Minimum, percentage);
-            trackBarOpacity.Value = percentage;
-        }
-
-        private void trackBarOpacity_Scroll(object sender, EventArgs e)
-        {
-            plugin.AttackMissView.MyOpacity = ((double)trackBarOpacity.Value) / 100;
         }
 
         private void checkViewVisible_CheckedChanged(object sender, EventArgs e)
@@ -88,6 +57,43 @@ namespace RearFlankChecker
         {
             if (!updateFromOverlayMove)
                 plugin.AttackMissView.Top = (int)udViewY.Value;
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            linkUpdate.Text = UpdateChecker.DoCheck();
+        }
+
+        private void linkUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(UpdateChecker.GetReleaseFileUrl());
+        }
+
+        private void trackBarOpacity_ValueChanged(object sender, EventArgs e)
+        {
+            plugin.AttackMissView.Opacity = ((double)trackBarOpacity.Value) / 100;
+            labelCurrOpacity.Text = String.Format("{0}%", trackBarOpacity.Value);
+        }
+
+        public void InitializeSettings()
+        {
+            linkUpdate.Text = "";
+            checkSoundEnable.Checked = true;
+
+            udViewX.Value = 100;
+            udViewX_ValueChanged(this, null);
+
+            udViewY.Value = 100;
+            udViewY_ValueChanged(this, null);
+
+            trackBarOpacity.Value = 70;
+            trackBarOpacity_ValueChanged(this, null);
+
+            checkViewMouseEnable.Checked = true;
+            checkViewMouseEnable_CheckedChanged(this, null);
+
+            checkViewVisible.Checked = true;
+            checkViewVisible_CheckedChanged(this, null);
         }
     }
 }

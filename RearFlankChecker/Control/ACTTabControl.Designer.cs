@@ -41,6 +41,8 @@
             this.checkViewVisible = new System.Windows.Forms.CheckBox();
             this.groupSound = new System.Windows.Forms.GroupBox();
             this.checkSoundEnable = new System.Windows.Forms.CheckBox();
+            this.linkUpdate = new System.Windows.Forms.LinkLabel();
+            this.btnUpdate = new System.Windows.Forms.Button();
             this.groupView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udViewY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udViewX)).BeginInit();
@@ -150,7 +152,7 @@
             this.trackBarOpacity.TabIndex = 7;
             this.trackBarOpacity.TickFrequency = 10;
             this.trackBarOpacity.Value = 80;
-            this.trackBarOpacity.Scroll += new System.EventHandler(this.trackBarOpacity_Scroll);
+            this.trackBarOpacity.ValueChanged += new System.EventHandler(this.trackBarOpacity_ValueChanged);
             // 
             // labelCurrOpacity
             // 
@@ -218,14 +220,37 @@
             this.checkSoundEnable.Text = "方向指定を間違えたら鳴らす";
             this.checkSoundEnable.UseVisualStyleBackColor = true;
             // 
+            // linkUpdate
+            // 
+            this.linkUpdate.AutoSize = true;
+            this.linkUpdate.Location = new System.Drawing.Point(140, 293);
+            this.linkUpdate.Name = "linkUpdate";
+            this.linkUpdate.Size = new System.Drawing.Size(74, 12);
+            this.linkUpdate.TabIndex = 11;
+            this.linkUpdate.TabStop = true;
+            this.linkUpdate.Text = "最新バージョン";
+            this.linkUpdate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkUpdate_LinkClicked);
+            // 
+            // btnUpdate
+            // 
+            this.btnUpdate.Location = new System.Drawing.Point(19, 288);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(105, 23);
+            this.btnUpdate.TabIndex = 10;
+            this.btnUpdate.Text = "バージョン確認";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            // 
             // ACTTabControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.linkUpdate);
+            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.groupSound);
             this.Controls.Add(this.groupView);
             this.Name = "ACTTabControl";
-            this.Size = new System.Drawing.Size(451, 298);
+            this.Size = new System.Drawing.Size(451, 329);
             this.groupView.ResumeLayout(false);
             this.groupView.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udViewY)).EndInit();
@@ -234,6 +259,7 @@
             this.groupSound.ResumeLayout(false);
             this.groupSound.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -241,15 +267,17 @@
         private System.Windows.Forms.GroupBox groupView;
         private System.Windows.Forms.Label labelViewY;
         private System.Windows.Forms.Label labelViewX;
-        private System.Windows.Forms.NumericUpDown udViewY;
-        private System.Windows.Forms.NumericUpDown udViewX;
         private System.Windows.Forms.Label labelViewOrientation;
-        private System.Windows.Forms.TrackBar trackBarOpacity;
         private System.Windows.Forms.Label labelCurrOpacity;
         private System.Windows.Forms.Label labelOpacity;
-        private System.Windows.Forms.CheckBox checkViewMouseEnable;
-        private System.Windows.Forms.CheckBox checkViewVisible;
         private System.Windows.Forms.GroupBox groupSound;
-        private System.Windows.Forms.CheckBox checkSoundEnable;
+        private System.Windows.Forms.LinkLabel linkUpdate;
+        private System.Windows.Forms.Button btnUpdate;
+        public System.Windows.Forms.NumericUpDown udViewY;
+        public System.Windows.Forms.NumericUpDown udViewX;
+        public System.Windows.Forms.CheckBox checkViewMouseEnable;
+        public System.Windows.Forms.CheckBox checkViewVisible;
+        public System.Windows.Forms.CheckBox checkSoundEnable;
+        public System.Windows.Forms.TrackBar trackBarOpacity;
     }
 }

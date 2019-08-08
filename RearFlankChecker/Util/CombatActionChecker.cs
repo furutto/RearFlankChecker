@@ -91,17 +91,29 @@ namespace RearFlankChecker.Util
                 // 侍
                 case "1D39": // 月光
                 case "1D3A": // 花車 　　成功 A3C 失敗 53C っぽい
-                    isJudge = logDatas[13].Equals("A3C") || logDatas[11].Equals("A3C");
+                    isJudge = IsContainStr("A3C", logDatas);
                     break;
                 // モンク  
                 case "35":  // 連撃
-                    isJudge = logDatas[13].Equals("1C") || logDatas[15].Equals("1C") || logDatas[11].Equals("1C");
+                    isJudge = IsContainStr("1C", logDatas);
                     break;
             }
 
             return isJudge;
         }
 
+
+        private static bool IsContainStr(String targetStr, String[] logDatas)
+        {
+            for (int i = 11; i < 25 && i < logDatas.Length; i++)
+            {
+                if (logDatas[i].Equals(targetStr))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public static String GetActorId(CombatActionEventArgs actionInfo)
         {

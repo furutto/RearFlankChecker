@@ -53,7 +53,7 @@ namespace RearFlankChecker.Util
                     break;
                 case 2258:  // だまし
                     // isJudge = !sDmgAdjust.Equals("");    // patch 5.08
-                    isJudge = !sDmgAdjust.Equals("");       // patch 5.1
+                    isJudge = sDmgAdjust.Equals("0.3");    // patch 5.1
                     break;
                 //  竜騎士
                 case 88:  // 桜華

@@ -42,15 +42,18 @@ namespace RearFlankChecker.Util
                 case 2255:  // 旋風刃
                     // isJudge = sDmgAdjust.Equals("0.7");  // patch 4.5
                     // isJudge = sDmgAdjust.Equals("0.76"); // patch 5.0
-                    isJudge = sDmgAdjust.Equals("0.78");    // patch 5.08
+                    // isJudge = sDmgAdjust.Equals("0.78"); // patch 5.08
+                    isJudge = sDmgAdjust.Equals("0.79");    // patch 5.1
                     break;
                 case 3563:  // 強甲破点突
                     // isJudge = sDmgAdjust.Equals("0.66"); // patch 4.5
                     // isJudge = sDmgAdjust.Equals("0.74"); // patch 5.0
-                    isJudge = sDmgAdjust.Equals("0.77");    // patch 5.08
+                    // isJudge = sDmgAdjust.Equals("0.77"); // patch 5.08
+                    isJudge = sDmgAdjust.Equals("0.78");    // patch 5.1
                     break;
                 case 2258:  // だまし
-                    isJudge = !sDmgAdjust.Equals("");
+                    // isJudge = !sDmgAdjust.Equals("");    // patch 5.08
+                    isJudge = !sDmgAdjust.Equals("");       // patch 5.1
                     break;
                 //  竜騎士
                 case 88:  // 桜華
